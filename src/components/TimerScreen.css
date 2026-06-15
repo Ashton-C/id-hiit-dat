@@ -1,0 +1,60 @@
+.timer-screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  overflow: hidden;
+  transition: background-color 0.5s ease;
+  /* Phase background colors (dark theme defaults). */
+  background-color: var(--phase-bg, #15171c);
+}
+
+.timer-screen--prepare {
+  --phase-bg: #1f2430; /* neutral slate */
+}
+.timer-screen--work {
+  --phase-bg: #7a1f2b; /* intense crimson */
+}
+.timer-screen--rest {
+  --phase-bg: #14463f; /* calm teal */
+}
+.timer-screen--done {
+  --phase-bg: #1d4d2b; /* success green */
+}
+
+.timer-screen__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2rem, 8vh, 4rem);
+  padding: 2rem;
+}
+
+/* A quick white flash on phase transitions; remounted via key to replay. */
+.timer-screen__flash {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  animation: timer-flash 0.45s ease-out;
+}
+
+@keyframes timer-flash {
+  0% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer-screen__flash {
+    animation: none;
+  }
+}

@@ -1,0 +1,36 @@
+.controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.controls__btn {
+  font: inherit;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 0.9rem 2.5rem;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  transition: transform 0.08s ease, opacity 0.15s ease, background 0.15s ease;
+}
+
+.controls__btn:active {
+  transform: scale(0.96);
+}
+
+.controls__btn--primary {
+  background: #fff;
+  color: #111;
+}
+
+.controls__btn--secondary {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.controls__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
