@@ -1,0 +1,6 @@
+.minimal-visual {
+  position: absolute;
+  inset: 0;
+  background-color: var(--phase-bg, #15171c);
+  transition: background-color 0.5s ease;
+}

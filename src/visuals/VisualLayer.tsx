@@ -1,15 +1,15 @@
 /**
- * Full-screen animated background, switched by visual mode. Renders behind the
- * timer/controls. Owns the phase-transition flash (driven off snapshot phase
- * changes) so the rest of the app doesn't need to.
- *
- * NOTE: 'gradient' and 'diagram' modes are added in their own phase; until then
- * they fall back to 'minimal' so the seam is live without dead UI.
+ * Full-screen decorative background, switched by visual mode. Renders behind the
+ * timer/controls (z-index 0, pointer-events: none). Owns the mode-independent
+ * phase-transition flash, driven off forward phase changes in the snapshot.
  */
 
 import { useEffect, useRef, useState } from 'react'
 import type { TimerSnapshot } from '../engine/timer'
 import type { VisualMode } from '../state/settings'
+import { MinimalVisual } from './modes/MinimalVisual'
+import { GradientVisual } from './modes/GradientVisual'
+import { DiagramVisual } from './modes/DiagramVisual'
 import './VisualLayer.css'
 
 interface VisualLayerProps {
@@ -18,7 +18,6 @@ interface VisualLayerProps {
 }
 
 export function VisualLayer({ mode, snapshot }: VisualLayerProps) {
-  const phaseKind = snapshot.phase.kind
   const [flashKey, setFlashKey] = useState(0)
   const prevPhaseIndex = useRef(snapshot.phaseIndex)
 
@@ -30,11 +29,12 @@ export function VisualLayer({ mode, snapshot }: VisualLayerProps) {
     prevPhaseIndex.current = snapshot.phaseIndex
   }, [snapshot.phaseIndex, snapshot.status])
 
-  // gradient/diagram modes are added in the visuals phase; until then every mode
-  // renders the minimal phase-colored background (driven by the phase-* class).
   return (
-    <div className={`visual-layer visual-layer--${mode} phase-${phaseKind}`} aria-hidden="true">
-      <div key={flashKey} className="visual-layer__flash" />
+    <div className="visual-layer" aria-hidden="true">
+      {mode === 'minimal' && <MinimalVisual snapshot={snapshot} />}
+      {mode === 'gradient' && <GradientVisual snapshot={snapshot} />}
+      {mode === 'diagram' && <DiagramVisual snapshot={snapshot} />}
+      {flashKey > 0 && <div key={flashKey} className="visual-layer__flash" />}
     </div>
   )
 }

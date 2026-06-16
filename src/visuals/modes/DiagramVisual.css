@@ -1,0 +1,32 @@
+.diagram-visual {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background-color: color-mix(in srgb, var(--accent) 55%, #15171c);
+  transition: background-color 0.5s ease;
+}
+
+.diagram-visual__figure {
+  width: min(70vw, 46vh);
+  color: rgba(255, 255, 255, 0.9);
+  /* Nudge up so the centered TimerDisplay reads over the legs, not the head. */
+  transform: translateY(-6%);
+  transition: opacity 0.4s ease;
+}
+
+.diagram-visual__figure.is-preview {
+  opacity: 0.4;
+}
+
+.diagram-visual .exercise-diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diagram-visual__figure [data-motion] {
+    display: none;
+  }
+}

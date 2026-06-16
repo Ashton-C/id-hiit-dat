@@ -3,27 +3,14 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  transition: background-color 0.5s ease;
-  background-color: var(--phase-bg, #15171c);
-}
-
-/* Phase background colors (minimal mode, dark theme). */
-.visual-layer.phase-prepare {
-  --phase-bg: #1f2430;
-}
-.visual-layer.phase-work {
-  --phase-bg: #7a1f2b;
-}
-.visual-layer.phase-rest {
-  --phase-bg: #14463f;
-}
-.visual-layer.phase-done {
-  --phase-bg: #1d4d2b;
+  pointer-events: none;
+  background-color: #15171c;
 }
 
 .visual-layer__flash {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: #fff;
   opacity: 0;
   pointer-events: none;

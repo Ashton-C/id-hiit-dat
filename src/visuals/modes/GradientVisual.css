@@ -1,0 +1,64 @@
+.gradient-visual {
+  position: absolute;
+  inset: 0;
+  background: var(--grad-a);
+  transition: background-color 0.8s ease;
+}
+
+/* Layer 1: a large, slowly drifting linear gradient → motion without nausea. */
+.gradient-visual__drift {
+  position: absolute;
+  inset: -25%;
+  background: linear-gradient(135deg, var(--grad-a) 0%, var(--grad-b) 45%, var(--grad-a) 100%);
+  background-size: 200% 200%;
+  animation: grad-drift 18s ease-in-out infinite;
+  animation-play-state: var(--pulse-play, running);
+  will-change: background-position;
+}
+
+/* Layer 2: a radial "energy" glow that pulses at the phase tempo. */
+.gradient-visual__pulse {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 55%, var(--grad-b) 0%, transparent 60%);
+  opacity: 0.45;
+  mix-blend-mode: screen;
+  animation: grad-pulse var(--pulse-seconds, 4s) ease-in-out infinite;
+  animation-play-state: var(--pulse-play, running);
+  will-change: opacity, transform;
+}
+
+@keyframes grad-drift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes grad-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.06);
+  }
+}
+
+/* Accessibility: kill motion, keep a pleasant static gradient. */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-visual__drift,
+  .gradient-visual__pulse {
+    animation: none;
+  }
+  .gradient-visual__pulse {
+    opacity: 0.4;
+  }
+}
