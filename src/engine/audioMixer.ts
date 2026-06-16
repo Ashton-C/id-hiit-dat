@@ -102,6 +102,8 @@ export class AudioMixer {
   private incoming: Voice | null = null
   private buffers = new Map<string, AudioBuffer>()
   private loading = new Set<string>()
+  /** Track ids that failed to load (e.g. file not present) — skipped thereafter. */
+  private failed = new Set<string>()
   private listeners = new Set<Listener>()
 
   constructor(deps: AudioMixerDeps, opts: AudioMixerOptions) {
@@ -141,8 +143,20 @@ export class AudioMixer {
     for (const l of this.listeners) l(snap)
   }
 
+  /** Next index whose track hasn't failed to load; null if none remain. */
+  private nextPlayableIndex(from: number): number | null {
+    let i = from
+    for (let step = 0; step < this.playlist.length; step++) {
+      const ni = nextIndex(i, this.playlist.length, this.loopPlaylist)
+      if (ni === null) return null
+      if (!this.failed.has(this.playlist[ni].id)) return ni
+      i = ni
+    }
+    return null
+  }
+
   private nextTrack(): Track | undefined {
-    const ni = nextIndex(this.index, this.playlist.length, this.loopPlaylist)
+    const ni = this.nextPlayableIndex(this.index)
     return ni === null ? undefined : this.playlist[ni]
   }
 
@@ -163,7 +177,13 @@ export class AudioMixer {
   private preloadNext(): void {
     const next = this.nextTrack()
     if (next && !this.buffers.has(next.id) && !this.loading.has(next.id)) {
-      void this.ensureBuffer(next).then(() => this.emit())
+      void this.ensureBuffer(next)
+        .then(() => this.emit())
+        .catch(() => {
+          // Missing/undecodable file — never retry it.
+          this.failed.add(next.id)
+          this.emit()
+        })
     }
   }
 
@@ -181,20 +201,40 @@ export class AudioMixer {
     return { trackId: track.id, source, gain, endTime: startAt + track.durationSeconds }
   }
 
-  /** Start (or restart) the current track immediately at full gain. */
+  /**
+   * Start (or restart) playback at full gain, skipping any track whose file is
+   * missing/undecodable. If nothing in the playlist loads, settle on 'stopped'.
+   */
   private async startCurrent(): Promise<void> {
-    const track = this.playlist[this.index]
-    if (!track) return
+    if (this.playlist.length === 0) return
     // Resume the (possibly suspended) context so music started from the MusicBar
     // play button works even without going through the workout Start gesture.
     await this.bus.unlock()
     this.state = 'loading'
     this.emit()
-    const buffer = await this.ensureBuffer(track)
-    const now = this.bus.ctx.currentTime
-    this.active = this.makeVoice(track, buffer, now, 1)
-    this.state = 'playing'
-    this.preloadNext()
+
+    for (let attempt = 0; attempt < this.playlist.length; attempt++) {
+      const track = this.playlist[this.index]
+      if (track && !this.failed.has(track.id)) {
+        try {
+          const buffer = await this.ensureBuffer(track)
+          const now = this.bus.ctx.currentTime
+          this.active = this.makeVoice(track, buffer, now, 1)
+          this.state = 'playing'
+          this.preloadNext()
+          this.emit()
+          return
+        } catch {
+          this.failed.add(track.id)
+        }
+      }
+      const ni = this.nextPlayableIndex(this.index)
+      if (ni === null) break
+      this.index = ni
+    }
+
+    // Nothing loadable.
+    this.state = 'stopped'
     this.emit()
   }
 
@@ -268,11 +308,12 @@ export class AudioMixer {
   setPlaylist(tracks: Track[]): void {
     this.playlist = tracks
     this.index = Math.min(this.index, Math.max(0, tracks.length - 1))
+    this.failed.clear() // give a fresh playlist a clean slate
   }
 
-  /** Crossfade from the active voice into the next track at `startAt`. */
+  /** Crossfade from the active voice into the next playable track at `startAt`. */
   private beginCrossfade(startAt: number, crossfade: number): void {
-    const ni = nextIndex(this.index, this.playlist.length, this.loopPlaylist)
+    const ni = this.nextPlayableIndex(this.index)
     if (ni === null) return
     const nextT = this.playlist[ni]
     const buffer = this.buffers.get(nextT.id)
@@ -310,12 +351,17 @@ export class AudioMixer {
     }
   }
 
-  /** Skip to the next track now with a faster crossfade. */
+  /** Skip to the next playable track now with a faster crossfade. */
   async next(): Promise<void> {
     if (this.state !== 'playing' || !this.active) return
-    const ni = nextIndex(this.index, this.playlist.length, this.loopPlaylist)
+    const ni = this.nextPlayableIndex(this.index)
     if (ni === null) return
-    await this.ensureBuffer(this.playlist[ni])
+    try {
+      await this.ensureBuffer(this.playlist[ni])
+    } catch {
+      this.failed.add(this.playlist[ni].id)
+      return
+    }
     const now = this.bus.ctx.currentTime
     this.beginCrossfade(now, this.skipCrossfadeSeconds)
   }

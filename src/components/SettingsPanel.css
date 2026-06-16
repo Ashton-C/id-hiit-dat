@@ -206,3 +206,17 @@
   line-height: 1.4;
   opacity: 0.8;
 }
+
+.settings-credits {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settings-credits__item {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  opacity: 0.8;
+}

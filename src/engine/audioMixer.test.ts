@@ -226,6 +226,34 @@ describe('AudioMixer (fake bus)', () => {
     expect(mixer.getSnapshot().volume).toBe(1)
   })
 
+  it('skips a track whose buffer fails to load (e.g. missing file)', async () => {
+    const { bus } = createFakeBus()
+    const loadBuffer = async (t: Track) => {
+      if (t.id === 'a') throw new Error('404')
+      return stubBuffer
+    }
+    const mixer = new AudioMixer({ bus, loadBuffer }, {
+      playlist: [track('a'), track('b'), track('c')],
+    })
+    await mixer.play()
+    await flush()
+    // 'a' failed → mixer lands on the first loadable track.
+    expect(mixer.getSnapshot().state).toBe('playing')
+    expect(mixer.getSnapshot().currentTrackId).toBe('b')
+  })
+
+  it('settles on stopped when no track can load', async () => {
+    const { bus } = createFakeBus()
+    const mixer = new AudioMixer(
+      { bus, loadBuffer: async () => { throw new Error('404') } },
+      { playlist: [track('a'), track('b')] },
+    )
+    await mixer.play()
+    await flush()
+    expect(mixer.getSnapshot().state).toBe('stopped')
+    expect(mixer.getSnapshot().currentTrackId).toBeNull()
+  })
+
   it('pauses and stops', async () => {
     const { bus } = createFakeBus()
     const mixer = new AudioMixer({ bus, loadBuffer: async () => stubBuffer }, {

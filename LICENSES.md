@@ -1,36 +1,43 @@
 # Music Licenses & Attribution
 
-This app bundles audio for offline playback. Each track below lists its source and
-license. Procedural demo tracks ship no audio bytes — they are synthesized at runtime.
+This app can bundle audio for offline playback. Procedural demo tracks ship no audio
+bytes (synthesized at runtime). Real tracks are dropped into `public/music/` (see
+`public/music/README.md`) and referenced from `src/assets/music/tracks.ts`.
 
 ## Demo (procedural)
 
-- **Pulse**, **Glow**, **Drive** — generated procedurally at runtime in the browser
-  (`src/assets/music/synth.ts`); no copyrighted audio is bundled.
-  License: original code, same as this project. No attribution required.
+- **Pulse**, **Glow**, **Drive** — generated procedurally at runtime
+  (`src/assets/music/synth.ts`); no copyrighted audio. License: project code. No
+  attribution. Kept as an always-available offline fallback.
 
-## Bundled tracks
+## Bundled tracks — CC0 1.0 (no attribution required)
 
-> None yet. To add real royalty-free electronic tracks, drop an `.ogg`/`.mp3` into
-> `src/assets/music/`, add a `{ kind: 'file', url }` entry in `tracks.ts` (import the
-> file so Vite bundles + fingerprints it for offline use), and record provenance below.
-> Prefer CC0 / Pixabay-license tracks (no attribution) to keep the UI clean; for CC-BY
-> tracks the `attribution` field must be surfaced in-app.
+License URL: https://creativecommons.org/publicdomain/zero/1.0/
 
-Sources to consider (verify the license **per track** at download time):
-Pixabay Music, Free Music Archive (filter CC0/CC BY), Free PD, OpenGameArt (CC0 loops),
-ccMixter, Incompetech (CC BY — attribution required).
+- Title: Ascend — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/ascend.ogg
+- Title: Flying Temple — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/flying-temple.ogg
+- Title: Lost Utopia — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/lost-utopia.ogg
+- Title: Starting Over — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/starting-over.ogg
+- Title: The Lab — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/the-lab.ogg
+- Title: Drama — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-2 — File: public/music/drama.ogg
+- Title: Extended — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-2 — File: public/music/extended.ogg
+- Title: Retro Synths — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/power-pop/retro-synths/ — File: public/music/retro-synths.ogg
+- Title: Mutant Club — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/power-pop — File: public/music/mutant-club.ogg
+- Title: Happy Dance — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/power-pop — File: public/music/happy-dance.ogg
 
-<!-- Template — one block per real track:
-- Title:        <track title>
-  Artist:       <artist / uploader>
-  Source URL:   <page URL where downloaded>
-  License:      <CC0-1.0 | CC-BY-4.0 | Pixabay Content License | ...>
-  License URL:  <link to the license text>
-  Attribution:  <exact required attribution string, or "none required">
-  Date added:   <YYYY-MM-DD>
-  File:         src/assets/music/<file>.ogg
--->
+## Bundled tracks — CC-BY 4.0 (attribution REQUIRED, shown in Settings → Credits)
+
+License URL: https://creativecommons.org/licenses/by/4.0/
+
+- Title: Electrodoodle — Artist: Kevin MacLeod (incompetech.com) — Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200079 — File: public/music/electrodoodle.ogg
+  Attribution: "Electrodoodle" by Kevin MacLeod (incompetech.com) — licensed under Creative Commons: By Attribution 4.0
+- Title: Local Forecast — Artist: Kevin MacLeod (incompetech.com) — Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300012 — File: public/music/local-forecast.ogg
+  Attribution: "Local Forecast" by Kevin MacLeod (incompetech.com) — licensed under Creative Commons: By Attribution 4.0
+
+> Verify each track's license at download time (licenses can vary per track within a
+> site). Pixabay/ccMixter were not auto-verifiable during research — confirm in a
+> browser before adding. The CC-BY attribution strings above are wired into the app's
+> Credits screen via `Track.attribution`.
 
 ## Exercise diagrams
 

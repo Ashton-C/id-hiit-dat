@@ -11,6 +11,7 @@ export async function loadBuffer(track: Track, ctx: BaseAudioContext): Promise<A
     return renderSynthTrack(track, track.source)
   }
   const res = await fetch(track.source.url) // bundled, same-origin asset (offline-cached by SW)
+  if (!res.ok) throw new Error(`track file ${track.source.url} -> HTTP ${res.status}`)
   const arr = await res.arrayBuffer()
   return ctx.decodeAudioData(arr)
 }

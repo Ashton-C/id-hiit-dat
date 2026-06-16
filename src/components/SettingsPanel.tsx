@@ -8,6 +8,7 @@ import { totalSeconds } from '../engine/routine'
 import { useSettings } from '../state/SettingsProvider'
 import { CUSTOM_PRESET_ID, PRESETS, type VisualMode } from '../state/settings'
 import { useInstallPrompt } from '../pwa/useInstallPrompt'
+import { tracksRequiringAttribution } from '../assets/music/tracks'
 import { formatTime } from '../utils/format'
 import './SettingsPanel.css'
 
@@ -60,6 +61,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   } = useSettings()
   const { routine, presetId, visualMode, music, cuesMuted } = settings
   const install = useInstallPrompt()
+  const credits = tracksRequiringAttribution()
 
   const panelRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -223,6 +225,19 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
               />
             )}
           </section>
+
+          {credits.length > 0 && (
+            <section className="settings-section">
+              <h3>Music credits</h3>
+              <ul className="settings-credits">
+                {credits.map((t) => (
+                  <li key={t.id} className="settings-credits__item">
+                    {t.attribution}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {(install.canInstall || install.showIosHint) && (
             <section className="settings-section">
