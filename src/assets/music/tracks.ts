@@ -4,9 +4,9 @@
  * Real CC0/CC-BY tracks are referenced by a public path ('/music/<slug>.ogg').
  * Drop the matching .ogg files into `public/music/` (see its README) and they
  * play automatically — the build never needs the files present, and the mixer
- * gracefully skips any track whose file is missing. The procedurally-synthesized
- * demo tracks are kept at the end as an always-available offline fallback, so
- * music works even before the real files are added. See LICENSES.md for sources.
+ * gracefully skips any track whose file is missing. Tracks are tagged by genre so
+ * the Settings playlist picker can select All / Electronic / Hip Hop.
+ * See LICENSES.md for sources.
  */
 
 export type SynthPreset = 'deep-house' | 'synthwave' | 'techno'
@@ -14,6 +14,18 @@ export type SynthPreset = 'deep-house' | 'synthwave' | 'techno'
 export type TrackSource =
   | { kind: 'synth'; seed: number; preset: SynthPreset }
   | { kind: 'file'; url: string }
+
+/** Genre tag used by the playlist picker. */
+export type TrackCategory = 'electronic' | 'hiphop'
+
+/** A selectable playlist: a genre, or 'all'. */
+export type PlaylistId = 'all' | TrackCategory
+
+export const PLAYLISTS: { id: PlaylistId; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'electronic', label: 'Electronic' },
+  { id: 'hiphop', label: 'Hip Hop' },
+]
 
 export interface Track {
   /** Stable id, also used as settings.music.trackId. */
@@ -27,6 +39,8 @@ export interface Track {
   source: TrackSource
   /** SPDX-ish: 'CC0-1.0', 'CC-BY-4.0', 'Pixabay', or 'demo-synth'. */
   license: string
+  /** Genre, for the playlist picker. */
+  category?: TrackCategory
   /** Required attribution text for CC-BY tracks; surfaced on the Credits screen. */
   attribution?: string
 }
@@ -45,6 +59,18 @@ const CC0_TRACKS: Track[] = [
   { id: 'retro-synths', title: 'Retro Synths', artist: 'HoliznaCC0', bpm: 120, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/retro-synths.ogg' } },
   { id: 'mutant-club', title: 'Mutant Club', artist: 'HoliznaCC0', bpm: 120, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/mutant-club.ogg' } },
   { id: 'happy-dance', title: 'Happy Dance', artist: 'HoliznaCC0', bpm: 120, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/happy-dance.ogg' } },
+]
+
+/** CC0 hip hop / phonk beats — high-energy workout fuel, no attribution required. */
+const HIPHOP_CC0_TRACKS: Track[] = [
+  { id: 'only-human', title: 'Only Human', artist: 'HoliznaCC0', bpm: 160, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/only-human.ogg' } },
+  { id: 'pantheon', title: 'Pantheon', artist: 'HoliznaCC0', bpm: 104, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/pantheon.ogg' } },
+  { id: 'phonk-ish', title: 'Phonk-ish', artist: 'HoliznaCC0', bpm: 120, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/phonk-ish.ogg' } },
+  { id: 'phonk-remix', title: 'Phonk Remix', artist: 'HoliznaCC0', bpm: 90, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/phonk-remix.ogg' } },
+  { id: 're-adjustment', title: 'Re-Adjustment', artist: 'HoliznaCC0', bpm: 87, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/re-adjustment.ogg' } },
+  { id: 'tension-in-the-air', title: 'Tension in the Air', artist: 'HoliznaCC0', bpm: 87, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/tension-in-the-air.ogg' } },
+  { id: 'shadow-self', title: 'Shadow Self', artist: 'HoliznaCC0', bpm: 124, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/shadow-self.ogg' } },
+  { id: 'strange-brew', title: 'Strange Brew', artist: 'HoliznaCC0', bpm: 136, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/strange-brew.ogg' } },
 ]
 
 /** CC-BY — usable, but the attribution string MUST be shown (Credits screen). */
@@ -75,21 +101,23 @@ const CC_BY_TRACKS: Track[] = [
   },
 ]
 
-/**
- * Procedural fallback (zero assets, always works offline). Kept at the END of the
- * playlist so the mixer lands here if the real files aren't present yet; remove
- * once the bundled tracks are confirmed in place.
- */
-const SYNTH_TRACKS: Track[] = [
-  { id: 'demo-pulse', title: 'Pulse', artist: 'Procedural Demo', bpm: 124, durationSeconds: 48, loopable: true, license: 'demo-synth', source: { kind: 'synth', seed: 1, preset: 'deep-house' } },
-  { id: 'demo-glow', title: 'Glow', artist: 'Procedural Demo', bpm: 100, durationSeconds: 48, loopable: true, license: 'demo-synth', source: { kind: 'synth', seed: 2, preset: 'synthwave' } },
-  { id: 'demo-drive', title: 'Drive', artist: 'Procedural Demo', bpm: 132, durationSeconds: 48, loopable: true, license: 'demo-synth', source: { kind: 'synth', seed: 3, preset: 'techno' } },
-]
+const withCategory = (tracks: Track[], category: TrackCategory): Track[] =>
+  tracks.map((t) => ({ ...t, category }))
 
-export const TRACKS: Track[] = [...CC0_TRACKS, ...CC_BY_TRACKS, ...SYNTH_TRACKS]
+export const TRACKS: Track[] = [
+  ...withCategory(CC0_TRACKS, 'electronic'),
+  ...withCategory(HIPHOP_CC0_TRACKS, 'hiphop'),
+  ...withCategory(CC_BY_TRACKS, 'electronic'),
+]
 
 export function trackById(id: string | null | undefined): Track | undefined {
   return id ? TRACKS.find((t) => t.id === id) : undefined
+}
+
+/** Resolve a playlist selection to the tracks it includes. */
+export function tracksForPlaylist(id: string): Track[] {
+  if (id === 'electronic' || id === 'hiphop') return TRACKS.filter((t) => t.category === id)
+  return TRACKS
 }
 
 /** Tracks whose license requires displayed attribution (for the Credits screen). */

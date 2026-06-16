@@ -4,6 +4,7 @@
  */
 
 import { DEFAULT_ROUTINE, type Routine } from '../engine/routine'
+import { PLAYLISTS, type PlaylistId } from '../assets/music/tracks'
 
 export type VisualMode = 'minimal' | 'gradient' | 'diagram'
 
@@ -13,6 +14,8 @@ export interface MusicSettings {
   volume: number
   /** Selected track id, or null for "shuffle / auto". */
   trackId: string | null
+  /** Which playlist to draw from (genre, or 'all'). */
+  playlist: PlaylistId
 }
 
 export interface Settings {
@@ -73,7 +76,7 @@ export function defaultSettings(): Settings {
     routine: clone(DEFAULT_ROUTINE),
     presetId: DEFAULT_ROUTINE.id,
     visualMode: 'gradient',
-    music: { enabled: false, volume: 0.6, trackId: null },
+    music: { enabled: false, volume: 0.6, trackId: null, playlist: 'all' },
     cuesMuted: false,
   }
 }
@@ -131,10 +134,14 @@ export function parseSettings(raw: unknown): Settings {
   if (typeof data.cuesMuted === 'boolean') base.cuesMuted = data.cuesMuted
   if (typeof data.music === 'object' && data.music !== null) {
     const m = data.music as Record<string, unknown>
+    const playlist = PLAYLISTS.some((p) => p.id === m.playlist)
+      ? (m.playlist as PlaylistId)
+      : base.music.playlist
     base.music = {
       enabled: typeof m.enabled === 'boolean' ? m.enabled : base.music.enabled,
       volume: typeof m.volume === 'number' && Number.isFinite(m.volume) ? Math.min(1, Math.max(0, m.volume)) : base.music.volume,
       trackId: typeof m.trackId === 'string' ? m.trackId : null,
+      playlist,
     }
   }
   return base

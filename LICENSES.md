@@ -25,6 +25,17 @@ License URL: https://creativecommons.org/publicdomain/zero/1.0/
 - Title: Mutant Club — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/power-pop — File: public/music/mutant-club.ogg
 - Title: Happy Dance — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/power-pop — File: public/music/happy-dance.ogg
 
+## Bundled tracks — CC0 1.0 hip hop / phonk (no attribution required)
+
+- Title: Only Human — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ — File: public/music/only-human.ogg
+- Title: Pantheon — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ — File: public/music/pantheon.ogg
+- Title: Phonk-ish — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ — File: public/music/phonk-ish.ogg
+- Title: Phonk Remix — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ — File: public/music/phonk-remix.ogg
+- Title: Re-Adjustment — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ — File: public/music/re-adjustment.ogg
+- Title: Tension in the Air — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/ — File: public/music/tension-in-the-air.ogg
+- Title: Shadow Self — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/ — File: public/music/shadow-self.ogg
+- Title: Strange Brew — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/ — File: public/music/strange-brew.ogg
+
 ## Bundled tracks — CC-BY 4.0 (attribution REQUIRED, shown in Settings → Credits)
 
 License URL: https://creativecommons.org/licenses/by/4.0/

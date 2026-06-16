@@ -8,7 +8,7 @@ import { totalSeconds } from '../engine/routine'
 import { useSettings } from '../state/SettingsProvider'
 import { CUSTOM_PRESET_ID, PRESETS, type VisualMode } from '../state/settings'
 import { useInstallPrompt } from '../pwa/useInstallPrompt'
-import { tracksRequiringAttribution } from '../assets/music/tracks'
+import { PLAYLISTS, tracksRequiringAttribution } from '../assets/music/tracks'
 import { formatTime } from '../utils/format'
 import './SettingsPanel.css'
 
@@ -215,14 +215,31 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
               />
             </label>
             {music.enabled && (
-              <NumberField
-                label="Music volume"
-                value={Math.round(music.volume * 100)}
-                min={0}
-                max={100}
-                unit="%"
-                onChange={(v) => setMusic({ volume: v / 100 })}
-              />
+              <>
+                <div className="settings-subhead">Playlist</div>
+                <div className="settings-segmented" role="radiogroup" aria-label="Playlist">
+                  {PLAYLISTS.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={music.playlist === p.id}
+                      className={`settings-segmented__btn ${music.playlist === p.id ? 'is-active' : ''}`}
+                      onClick={() => setMusic({ playlist: p.id })}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+                <NumberField
+                  label="Music volume"
+                  value={Math.round(music.volume * 100)}
+                  min={0}
+                  max={100}
+                  unit="%"
+                  onChange={(v) => setMusic({ volume: v / 100 })}
+                />
+              </>
             )}
           </section>
 

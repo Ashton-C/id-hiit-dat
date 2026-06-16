@@ -23,6 +23,19 @@ and save with the **exact** filename below.
 | `mutant-club.ogg` | Mutant Club | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/power-pop |
 | `happy-dance.ogg` | Happy Dance | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/power-pop |
 
+## CC0 hip hop / phonk workout beats — no attribution required
+
+| File | Track | Artist | Source |
+| ---- | ----- | ------ | ------ |
+| `only-human.ogg` | Only Human | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ |
+| `pantheon.ogg` | Pantheon | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ |
+| `phonk-ish.ogg` | Phonk-ish | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ |
+| `phonk-remix.ogg` | Phonk Remix | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ |
+| `re-adjustment.ogg` | Re-Adjustment | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/phonk-aura-farming/ |
+| `tension-in-the-air.ogg` | Tension in the Air | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/ |
+| `shadow-self.ogg` | Shadow Self | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/ |
+| `strange-brew.ogg` | Strange Brew | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/ |
+
 ## CC-BY 4.0 — attribution REQUIRED (shown in the app's Credits screen)
 
 | File | Track | Artist | Source |

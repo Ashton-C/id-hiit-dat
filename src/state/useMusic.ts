@@ -9,7 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AudioBus } from '../engine/audioContext'
 import type { TimerStatus } from '../engine/timer'
 import { AudioMixer, type MixerSnapshot } from '../engine/audioMixer'
-import { TRACKS } from '../assets/music/tracks'
+import { tracksForPlaylist } from '../assets/music/tracks'
 import { loadBuffer } from '../assets/music/loadBuffer'
 import { useSettings } from './SettingsProvider'
 
@@ -29,7 +29,7 @@ export interface UseMusic {
 
 export function useMusic(bus: AudioBus | null, timerStatus: TimerStatus): UseMusic {
   const { settings, setMusic } = useSettings()
-  const { enabled, volume } = settings.music
+  const { enabled, volume, playlist: playlistId } = settings.music
 
   const mixerRef = useRef<AudioMixer | null>(null)
   const [snapshot, setSnapshot] = useState<MixerSnapshot>(IDLE_SNAPSHOT)
@@ -39,7 +39,7 @@ export function useMusic(bus: AudioBus | null, timerStatus: TimerStatus): UseMus
     if (!bus || mixerRef.current) return
     const mixer = new AudioMixer(
       { bus, loadBuffer },
-      { playlist: TRACKS, volume },
+      { playlist: tracksForPlaylist(playlistId), volume },
     )
     mixerRef.current = mixer
     const unsub = mixer.onChange(setSnapshot)
@@ -49,9 +49,18 @@ export function useMusic(bus: AudioBus | null, timerStatus: TimerStatus): UseMus
       mixer.dispose()
       mixerRef.current = null
     }
-    // volume intentionally read once at construction; kept in sync by its own effect.
+    // playlist/volume read once at construction; kept in sync by their own effects.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bus])
+
+  // Swap the underlying playlist when the genre selection changes; crossfade into
+  // the new set if currently playing.
+  useEffect(() => {
+    const mixer = mixerRef.current
+    if (!mixer) return
+    mixer.setPlaylist(tracksForPlaylist(playlistId))
+    if (mixer.getSnapshot().state === 'playing') void mixer.next()
+  }, [playlistId])
 
   // Drive the mixer's crossfade scheduler while music is enabled.
   useEffect(() => {
