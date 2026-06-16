@@ -52,6 +52,16 @@ export default defineConfig({
               expiration: { maxEntries: 12, maxAgeSeconds: 60 * 60 * 24 * 180 },
             },
           },
+          {
+            // Lazy-loaded Lottie exercise animations — cache on first play.
+            urlPattern: ({ url }) => /\/animations\//.test(url.pathname),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'idhiit-animations-v1',
+              cacheableResponse: { statuses: [0, 200] },
+              expiration: { maxEntries: 24, maxAgeSeconds: 60 * 60 * 24 * 180 },
+            },
+          },
         ],
       },
     }),

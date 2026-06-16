@@ -67,12 +67,12 @@ describe('buildTimeline', () => {
 })
 
 describe('DEFAULT_ROUTINE', () => {
-  it('is the ~13-minute classic (close to 780s)', () => {
+  it('is the ~13-minute classic (close to 800s)', () => {
     const secs = totalSeconds(DEFAULT_ROUTINE)
-    // 10 prepare + 18×30 work + 17×10 rest = 720s. Within a sensible band.
-    expect(secs).toBe(720)
+    // 10 prepare + 20×30 work + 19×10 rest = 800s.
+    expect(secs).toBe(800)
     const work = buildTimeline(DEFAULT_ROUTINE).filter((p) => p.kind === 'work')
-    expect(work).toHaveLength(18)
+    expect(work).toHaveLength(20)
   })
 })
 

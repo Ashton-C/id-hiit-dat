@@ -26,6 +26,23 @@
   display: block;
 }
 
+/* Lottie animations are full-colour illustrations — give the container a square
+   box (matching the diagrams' viewBox) so the SVG renderer has height to fill. */
+.diagram-visual__figure.has-animation {
+  width: min(62vw, 40vh);
+}
+
+.diagram-visual .exercise-animation {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.diagram-visual .exercise-animation svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .diagram-visual__figure [data-motion] {
     display: none;

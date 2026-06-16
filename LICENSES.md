@@ -53,3 +53,23 @@ License URL: https://creativecommons.org/licenses/by/4.0/
 ## Exercise diagrams
 
 Hand-coded inline SVG (`src/visuals/diagrams/`); original work, no third-party assets.
+
+## Exercise animations — Lottie Simple License (LottieFiles)
+
+Free for commercial use; attribution appreciated, not required. Files in
+`public/animations/`, referenced from `src/assets/animations/animations.ts`.
+License: https://lottiefiles.com/page/license
+
+Exact matches:
+- Burpees — Dinh Bui Xuan — https://lottiefiles.com/free-animation/burpee-and-jump-exercise-gCOcxxnr1X — File: public/animations/burpees.json
+- Out + Up Jacks (Jumping Jack) — Dinh Bui Xuan — https://lottiefiles.com/free-animation/jumping-jack-Q3NN7cRkd4 — File: public/animations/out-up-jacks.json
+- Jump Squats — Dinh Bui Xuan — https://lottiefiles.com/free-animation/jumping-squats-9hzVV8Ohi6 — File: public/animations/jump-squats.json
+- Squats — Daniel Bogdanov — https://lottiefiles.com/free-animation/squat-vSgVOYiNCJ — File: public/animations/squats.json
+- Tricep Dips — saagar shrestha — https://lottiefiles.com/free-animation/triceps-dips-2dOoFiAlnP — File: public/animations/tricep-dips.json
+
+Close matches (no exact free Lottie existed — see public/animations/README.md):
+- Mountain Climbers ≈ press-up toe tap — Dinh Bui Xuan — https://lottiefiles.com/free-animation/press-up-postion-toe-tap-KunqnEdK18 — File: public/animations/mountain-climbers.json
+- Bicycle Crunches ≈ elbow-to-knee crunch — LottieFiles community — https://lottiefiles.com/free-animation/elbow-to-knee-crunch-right-FYWv5sww1I — File: public/animations/bicycle-crunches.json
+- Plank Jacks ≈ plank hold — Blinix — https://lottiefiles.com/free-animation/plank-667YC6ODte — File: public/animations/plank-jacks.json
+- Station Sprints ≈ running in place — Vasundhara Ghose — https://lottiefiles.com/free-animation/running-Igsta2QgtP — File: public/animations/station-sprints.json
+- Skater Taps ≈ split jump — Dinh Bui Xuan — https://lottiefiles.com/free-animation/split-jump-exercise-AHHpx1bumx — File: public/animations/skater-taps.json

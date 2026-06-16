@@ -116,25 +116,25 @@ export function totalSeconds(routine: Routine): number {
 }
 
 /**
- * PLACEHOLDER exercise sequence.
- * TODO(user): replace with the real exercises from the wife's 13-min video.
- * 18 work phases × 30s + 17 rests × 10s + 10s prepare ≈ 13 min total.
+ * Default exercise sequence. ids match the Lottie animations in
+ * `src/assets/animations/animations.ts` so each work phase shows its move.
+ * 20 work phases × 30s + 19 rests × 10s + 10s prepare ≈ 13.3 min total.
  */
-const PLACEHOLDER_EXERCISES: Exercise[] = [
-  { id: 'jumping-jacks', name: 'Jumping Jacks' },
-  { id: 'squats', name: 'Squats' },
-  { id: 'push-ups', name: 'Push-ups' },
-  { id: 'high-knees', name: 'High Knees' },
-  { id: 'lunges', name: 'Lunges' },
-  { id: 'mountain-climbers', name: 'Mountain Climbers' },
-  { id: 'plank', name: 'Plank' },
+const ROUTINE_EXERCISES: Exercise[] = [
+  { id: 'skater-taps', name: 'Skater Taps' },
+  { id: 'out-up-jacks', name: 'Out + Up Jacks' },
   { id: 'burpees', name: 'Burpees' },
-  { id: 'glute-bridges', name: 'Glute Bridges' },
+  { id: 'station-sprints', name: 'Station Sprints' },
+  { id: 'jump-squats', name: 'Jump Squats' },
+  { id: 'mountain-climbers', name: 'Mountain Climbers' },
+  { id: 'squats', name: 'Squats' },
+  { id: 'tricep-dips', name: 'Tricep Dips' },
+  { id: 'plank-jacks', name: 'Plank Jacks' },
+  { id: 'bicycle-crunches', name: 'Bicycle Crunches' },
 ]
 
 /**
- * Default routine: replicates the 13-minute, 30s-work / 10s-rest video.
- * 9 exercises × 2 rounds = 18 work phases.
+ * Default routine: 30s-work / 10s-rest, 10 exercises × 2 rounds = 20 work phases.
  */
 export const DEFAULT_ROUTINE: Routine = {
   id: 'default-13min',
@@ -142,6 +142,6 @@ export const DEFAULT_ROUTINE: Routine = {
   prepareSeconds: 10,
   workSeconds: 30,
   restSeconds: 10,
-  exercises: PLACEHOLDER_EXERCISES,
+  exercises: ROUTINE_EXERCISES,
   rounds: 2,
 }
