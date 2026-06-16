@@ -1,16 +1,20 @@
 /**
  * Single-screen workout view. Binds the timer engine, routes phase events to
- * audio cues, and composes the visual background, controls, and settings.
- * Music plugs in here in its own phase (gated on settings.music.enabled).
+ * audio cues, drives the music mixer off the timer lifecycle, and composes the
+ * visual background, controls, music bar, and settings. Cues and music share one
+ * AudioBus so a single Start gesture unlocks both.
  */
 
 import { useEffect, useRef, useState } from 'react'
 import { CuePlayer } from '../engine/cues'
 import { useSettings } from '../state/SettingsProvider'
+import { useAudioBus } from '../state/useAudioBus'
+import { useMusic } from '../state/useMusic'
 import { useTimer } from '../state/useTimer'
 import { TimerDisplay } from '../visuals/TimerDisplay'
 import { VisualLayer } from '../visuals/VisualLayer'
 import { Controls } from './Controls'
+import { MusicBar } from './MusicBar'
 import { SettingsPanel } from './SettingsPanel'
 import './TimerScreen.css'
 
@@ -21,9 +25,12 @@ export function TimerScreen() {
   const { settings } = useSettings()
   const { snapshot, toggle, reset, onTransition } = useTimer(settings.routine)
 
+  const bus = useAudioBus()
   const cueRef = useRef<CuePlayer | null>(null)
-  if (cueRef.current === null) cueRef.current = new CuePlayer()
+  if (cueRef.current === null) cueRef.current = new CuePlayer(bus)
   const cue = cueRef.current
+
+  const music = useMusic(bus, snapshot.status)
 
   const [settingsOpen, setSettingsOpen] = useState(false)
   const lastBeepSecond = useRef<number | null>(null)
@@ -55,7 +62,9 @@ export function TimerScreen() {
   }, [snapshot.status, snapshot.phase.kind, snapshot.phaseRemainingSeconds, cue])
 
   const handleToggle = () => {
-    cue.unlock() // satisfy autoplay policy from this user gesture
+    // Satisfy autoplay policy for both cues and music from this user gesture.
+    void bus?.unlock()
+    cue.unlock()
     toggle()
   }
 
@@ -76,6 +85,16 @@ export function TimerScreen() {
         <TimerDisplay snapshot={snapshot} />
         <Controls status={snapshot.status} onToggle={handleToggle} onReset={reset} />
       </div>
+
+      {settings.music.enabled && (
+        <MusicBar
+          snapshot={music.snapshot}
+          volume={settings.music.volume}
+          onPlayPause={music.playPause}
+          onNext={music.next}
+          onVolume={music.setVolume}
+        />
+      )}
 
       {settingsOpen && <SettingsPanel onClose={() => setSettingsOpen(false)} />}
     </main>

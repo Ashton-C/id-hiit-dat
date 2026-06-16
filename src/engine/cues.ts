@@ -5,7 +5,13 @@
  * assets and have zero latency. The AudioContext is created lazily and must be
  * resumed from a user gesture (browser autoplay policy) — call `unlock()` from a
  * click/tap handler (e.g. the Start button).
+ *
+ * Optionally accepts a shared {@link AudioBus} so cues and music share one context
+ * (single autoplay unlock, sane mobile behavior). Without a bus it self-creates a
+ * context and routes to `ctx.destination` (used by cue-only unit tests).
  */
+
+import type { AudioBus } from './audioContext'
 
 export type CueKind = 'countdown' | 'work' | 'rest' | 'done'
 
@@ -27,20 +33,35 @@ const TONES: Record<CueKind, ToneSpec> = {
 }
 
 export class CuePlayer {
-  private ctx: AudioContext | null = null
+  private bus: AudioBus | null
+  private ownCtx: AudioContext | null = null
   private muted = false
 
+  constructor(bus?: AudioBus | null) {
+    this.bus = bus ?? null
+  }
+
+  /** Attach a shared bus after construction (e.g. once the bus hook initializes). */
+  setBus(bus: AudioBus | null): void {
+    this.bus = bus
+  }
+
   private ensureContext(): AudioContext | null {
+    if (this.bus) return this.bus.ctx
     if (typeof window === 'undefined') return null
-    if (this.ctx === null) {
+    if (this.ownCtx === null) {
       const Ctor =
         window.AudioContext ??
-        (window as unknown as { webkitAudioContext?: typeof AudioContext })
-          .webkitAudioContext
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
       if (!Ctor) return null
-      this.ctx = new Ctor()
+      this.ownCtx = new Ctor()
     }
-    return this.ctx
+    return this.ownCtx
+  }
+
+  /** Node cues connect to: the shared master if present, else the raw destination. */
+  private outputNode(ctx: AudioContext): AudioNode {
+    return this.bus ? this.bus.master : ctx.destination
   }
 
   /** Call from a user gesture so subsequent programmatic cues are allowed. */
@@ -73,7 +94,7 @@ export class CuePlayer {
     gain.gain.exponentialRampToValueAtTime(0.3, now + 0.01)
     gain.gain.exponentialRampToValueAtTime(0.0001, now + dur)
 
-    osc.connect(gain).connect(ctx.destination)
+    osc.connect(gain).connect(this.outputNode(ctx))
     osc.start(now)
     osc.stop(now + dur + 0.02)
   }

@@ -1,0 +1,54 @@
+.music-bar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: min(440px, calc(100vw - 2rem));
+  padding: 0.5rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  color: #fff;
+}
+
+.music-bar__btn {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.08s ease;
+}
+
+.music-bar__btn:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.music-bar__btn:active {
+  transform: scale(0.94);
+}
+
+.music-bar__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.9;
+}
+
+.music-bar__vol {
+  flex: none;
+  width: 72px;
+  accent-color: #ff5c72;
+}
