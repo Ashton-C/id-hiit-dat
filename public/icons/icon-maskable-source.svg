@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Glyph kept within the inner 80% safe zone so Android masks never clip it. -->
+  <rect width="512" height="512" fill="#15171c"/>
+  <polyline
+    points="121,271 207,271 238,271 256,158 278,367 299,231 324,271 391,271"
+    fill="none" stroke="#ff5c72" stroke-width="32"
+    stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

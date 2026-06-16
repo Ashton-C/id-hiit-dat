@@ -6,6 +6,7 @@
 import { totalSeconds } from '../engine/routine'
 import { useSettings } from '../state/SettingsProvider'
 import { CUSTOM_PRESET_ID, PRESETS, type VisualMode } from '../state/settings'
+import { useInstallPrompt } from '../pwa/useInstallPrompt'
 import { formatTime } from '../utils/format'
 import './SettingsPanel.css'
 
@@ -57,6 +58,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
     setCuesMuted,
   } = useSettings()
   const { routine, presetId, visualMode, music, cuesMuted } = settings
+  const install = useInstallPrompt()
 
   return (
     <div className="settings-overlay" role="dialog" aria-modal="true" aria-label="Workout settings">
@@ -172,6 +174,26 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
               />
             )}
           </section>
+
+          {(install.canInstall || install.showIosHint) && (
+            <section className="settings-section">
+              <h3>Install</h3>
+              {install.canInstall ? (
+                <button
+                  type="button"
+                  className="settings-install"
+                  onClick={() => void install.promptInstall()}
+                >
+                  <span>Install app</span>
+                  <span className="settings-install__sub">Run offline, full screen</span>
+                </button>
+              ) : (
+                <p className="settings-install__hint">
+                  On iPhone: tap the Share icon, then “Add to Home Screen” to install.
+                </p>
+              )}
+            </section>
+          )}
         </div>
       </div>
     </div>

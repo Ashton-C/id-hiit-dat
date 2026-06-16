@@ -176,3 +176,33 @@
   height: 1.2rem;
   accent-color: #ff5c72;
 }
+
+.settings-install {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  background: #ff5c72;
+  color: #15171c;
+  font-weight: 700;
+}
+
+.settings-install__sub {
+  font-weight: 500;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.settings-install__hint {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  opacity: 0.8;
+}
