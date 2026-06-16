@@ -31,7 +31,12 @@ function isStandalone(): boolean {
 function isIosSafari(): boolean {
   if (typeof navigator === 'undefined') return false
   const ua = navigator.userAgent
-  return /iP(hone|ad|od)/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS/.test(ua)
+  if (/CriOS|FxiOS|EdgiOS/.test(ua)) return false // non-Safari iOS browsers
+  // iPhone/iPod, classic iPad UA, OR iPadOS 13+ which reports a desktop
+  // "Macintosh" UA but has a touch screen.
+  const isIosUa = /iP(hone|ad|od)/.test(ua)
+  const isIpadOs = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1
+  return (isIosUa || isIpadOs) && /Safari/.test(ua)
 }
 
 export function useInstallPrompt(): InstallPrompt {

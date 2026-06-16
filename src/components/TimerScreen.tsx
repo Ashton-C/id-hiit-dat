@@ -33,6 +33,7 @@ export function TimerScreen() {
   const music = useMusic(bus, snapshot.status)
 
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [announce, setAnnounce] = useState('')
   const lastBeepSecond = useRef<number | null>(null)
 
   // Keep the cue player's mute state in sync with settings.
@@ -43,10 +44,17 @@ export function TimerScreen() {
   // Audio cue on each phase transition.
   useEffect(() => {
     return onTransition((event) => {
-      const kind = event.to.kind
-      if (kind === 'work') cue.play('work')
-      else if (kind === 'rest') cue.play('rest')
-      else if (kind === 'done') cue.play('done')
+      const to = event.to
+      if (to.kind === 'work') {
+        cue.play('work')
+        setAnnounce(to.exercise ? `Work: ${to.exercise.name}` : 'Work')
+      } else if (to.kind === 'rest') {
+        cue.play('rest')
+        setAnnounce('Rest')
+      } else if (to.kind === 'done') {
+        cue.play('done')
+        setAnnounce('Workout complete')
+      }
       lastBeepSecond.current = null
     })
   }, [onTransition, cue])
@@ -69,7 +77,7 @@ export function TimerScreen() {
   }
 
   return (
-    <main className="timer-screen">
+    <main className={`timer-screen timer-screen--${settings.visualMode}`}>
       <VisualLayer mode={settings.visualMode} snapshot={snapshot} />
 
       <button
@@ -84,6 +92,10 @@ export function TimerScreen() {
       <div className="timer-screen__content">
         <TimerDisplay snapshot={snapshot} />
         <Controls status={snapshot.status} onToggle={handleToggle} onReset={reset} />
+      </div>
+
+      <div className="sr-only" role="status" aria-live="polite">
+        {announce}
       </div>
 
       {settings.music.enabled && (

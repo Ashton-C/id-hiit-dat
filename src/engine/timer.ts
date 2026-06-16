@@ -50,10 +50,10 @@ const defaultNow = (): number =>
     : Date.now()
 
 export class TimerEngine {
-  private timeline: TimelinePhase[]
+  private timeline!: TimelinePhase[]
   /** Cumulative duration (ms) before each phase, for total-elapsed math. */
-  private offsetsMs: number[]
-  private totalMs: number
+  private offsetsMs!: number[]
+  private totalMs!: number
   private readonly now: () => number
 
   private status: TimerStatus = 'idle'
@@ -67,6 +67,11 @@ export class TimerEngine {
 
   constructor(routine: Routine, opts: { now?: () => number } = {}) {
     this.now = opts.now ?? defaultNow
+    this.setRoutine(routine)
+  }
+
+  /** Build the timeline + cumulative offsets for a routine. */
+  private setRoutine(routine: Routine): void {
     this.timeline = buildTimeline(routine)
     this.offsetsMs = []
     let acc = 0
@@ -79,14 +84,7 @@ export class TimerEngine {
 
   /** Replace the routine and reset to idle. */
   load(routine: Routine): void {
-    this.timeline = buildTimeline(routine)
-    this.offsetsMs = []
-    let acc = 0
-    for (const phase of this.timeline) {
-      this.offsetsMs.push(acc)
-      acc += phase.durationSeconds * 1000
-    }
-    this.totalMs = acc
+    this.setRoutine(routine)
     this.reset()
   }
 

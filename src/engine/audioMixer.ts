@@ -19,12 +19,11 @@ export function equalPowerGains(p: number): { out: number; in: number } {
   return { out: Math.cos((x * Math.PI) / 2), in: Math.sin((x * Math.PI) / 2) }
 }
 
-/** Sampled equal-power curve for setValueCurveAtTime. Pure. */
+/** Sampled equal-power curve for setValueCurveAtTime, built from equalPowerGains. Pure. */
 export function equalPowerCurve(dir: 'in' | 'out', steps = 128): Float32Array {
   const a = new Float32Array(steps)
   for (let i = 0; i < steps; i++) {
-    const p = i / (steps - 1)
-    a[i] = dir === 'in' ? Math.sin((p * Math.PI) / 2) : Math.cos((p * Math.PI) / 2)
+    a[i] = equalPowerGains(i / (steps - 1))[dir]
   }
   return a
 }
@@ -174,7 +173,9 @@ export class AudioMixer {
     source.buffer = buffer
     source.loop = true
     const gain = ctx.createGain()
-    gain.gain.setValueAtTime(gainValue, startAt)
+    // Set the intrinsic value (not a scheduled event) so a subsequent
+    // setValueCurveAtTime at startAt can't collide with a setValueAtTime event.
+    gain.gain.value = gainValue
     source.connect(gain).connect(this.musicGain)
     source.start(startAt)
     return { trackId: track.id, source, gain, endTime: startAt + track.durationSeconds }
@@ -184,6 +185,9 @@ export class AudioMixer {
   private async startCurrent(): Promise<void> {
     const track = this.playlist[this.index]
     if (!track) return
+    // Resume the (possibly suspended) context so music started from the MusicBar
+    // play button works even without going through the workout Start gesture.
+    await this.bus.unlock()
     this.state = 'loading'
     this.emit()
     const buffer = await this.ensureBuffer(track)
@@ -195,7 +199,8 @@ export class AudioMixer {
   }
 
   async play(): Promise<void> {
-    if (this.state === 'playing') return
+    // 'loading' means a start is already in flight — don't start a second voice.
+    if (this.state === 'playing' || this.state === 'loading') return
     if (this.state === 'paused') {
       await this.resume()
       return
@@ -282,7 +287,12 @@ export class AudioMixer {
     outgoing.source.stop(startAt + crossfade + 0.05)
 
     this.active = incoming
-    this.incoming = null
+    // Track the still-fading outgoing voice so pause/stop/dispose fade it too;
+    // self-clear once it ends so we never silence the new active voice by mistake.
+    this.incoming = outgoing
+    outgoing.source.onended = () => {
+      if (this.incoming === outgoing) this.incoming = null
+    }
     this.index = ni
     this.prune()
     this.preloadNext()

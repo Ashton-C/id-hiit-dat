@@ -1,31 +1,82 @@
 .gradient-visual {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   background: var(--grad-a);
-  transition: background-color 0.8s ease;
+  transition: background-color 0.6s ease;
 }
 
-/* Layer 1: a large, slowly drifting linear gradient → motion without nausea. */
-.gradient-visual__drift {
+.gradient-visual > div {
   position: absolute;
-  inset: -25%;
-  background: linear-gradient(135deg, var(--grad-a) 0%, var(--grad-b) 45%, var(--grad-a) 100%);
-  background-size: 200% 200%;
-  animation: grad-drift 18s ease-in-out infinite;
-  animation-play-state: var(--pulse-play, running);
+  animation-play-state: var(--play, running);
+}
+
+/* Layer 1 — large neon gradient sliding across the screen (the main color motion). */
+.gradient-visual__drift {
+  inset: -40%;
+  background: linear-gradient(
+    115deg,
+    var(--grad-a) 0%,
+    var(--grad-b) 30%,
+    var(--grad-c) 55%,
+    var(--grad-a) 80%,
+    var(--grad-b) 100%
+  );
+  background-size: 280% 280%;
+  filter: saturate(1.25);
+  animation: grad-drift var(--drift-seconds, 8s) ease-in-out infinite;
   will-change: background-position;
 }
 
-/* Layer 2: a radial "energy" glow that pulses at the phase tempo. */
-.gradient-visual__pulse {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 55%, var(--grad-b) 0%, transparent 60%);
-  opacity: 0.45;
+/* Layer 2 — slow conic sweep for a rotating, futuristic light feel. */
+.gradient-visual__sweep {
+  inset: -60%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    var(--grad-c) 70deg,
+    transparent 150deg,
+    var(--glow) 230deg,
+    transparent 320deg,
+    transparent 360deg
+  );
+  opacity: 0.35;
   mix-blend-mode: screen;
-  animation: grad-pulse var(--pulse-seconds, 4s) ease-in-out infinite;
-  animation-play-state: var(--pulse-play, running);
+  animation: grad-sweep 14s linear infinite;
+  will-change: transform;
+}
+
+/* Layer 3 — moving LED scanlines (thin bright bars marching across). */
+.gradient-visual__led {
+  inset: -20%;
+  background: repeating-linear-gradient(
+    100deg,
+    transparent 0px,
+    transparent 22px,
+    color-mix(in srgb, var(--glow) 70%, transparent) 24px,
+    transparent 27px
+  );
+  opacity: 0.18;
+  mix-blend-mode: screen;
+  animation: grad-led 2.4s linear infinite;
+  will-change: transform;
+}
+
+/* Layer 4 — radial energy glow pulsing at the phase tempo. */
+.gradient-visual__pulse {
+  inset: 0;
+  background: radial-gradient(circle at 50% 48%, var(--glow) 0%, transparent 55%);
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  animation: grad-pulse var(--pulse-seconds, 2s) ease-in-out infinite;
   will-change: opacity, transform;
+}
+
+/* Layer 5 — gentle center scrim so the white timer stays legible over neon. */
+.gradient-visual__scrim {
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.42) 0%, transparent 58%);
+  animation: none;
 }
 
 @keyframes grad-drift {
@@ -40,23 +91,40 @@
   }
 }
 
-@keyframes grad-pulse {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.06);
+@keyframes grad-sweep {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-/* Accessibility: kill motion, keep a pleasant static gradient. */
+@keyframes grad-led {
+  to {
+    transform: translateX(46px);
+  }
+}
+
+@keyframes grad-pulse {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.62;
+    transform: scale(1.12);
+  }
+}
+
+/* Accessibility: cut motion, keep a vivid static neon gradient. */
 @media (prefers-reduced-motion: reduce) {
   .gradient-visual__drift,
+  .gradient-visual__sweep,
+  .gradient-visual__led,
   .gradient-visual__pulse {
     animation: none;
+  }
+  .gradient-visual__led {
+    opacity: 0.1;
   }
   .gradient-visual__pulse {
     opacity: 0.4;

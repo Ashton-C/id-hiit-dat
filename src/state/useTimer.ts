@@ -5,6 +5,11 @@
  * running, re-reading the snapshot each frame so the countdown stays smooth. The
  * rAF loop is only alive while the timer is running, so an idle/paused/done timer
  * costs nothing.
+ *
+ * Routine changes never destroy an in-progress workout: a structurally-identical
+ * routine (e.g. re-selecting the same preset, which clones a fresh object) is a
+ * no-op, and an edit made while running/paused is deferred and applied on the next
+ * reset rather than snapping the clock back to the start.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -14,6 +19,17 @@ import {
   type TimerSnapshot,
   type TransitionEvent,
 } from '../engine/timer'
+
+/** Stable identity for a routine's *timeline shape* (ignores object identity). */
+function routineFingerprint(r: Routine): string {
+  return [
+    r.prepareSeconds,
+    r.workSeconds,
+    r.restSeconds,
+    r.rounds,
+    r.exercises.map((e) => e.id).join(','),
+  ].join('|')
+}
 
 export interface UseTimer {
   snapshot: TimerSnapshot
@@ -37,9 +53,24 @@ export function useTimer(routine: Routine): UseTimer {
     engine.getSnapshot(),
   )
 
-  // Reload the engine if the routine identity changes.
+  // Fingerprint currently loaded into the engine.
+  const appliedFp = useRef(routineFingerprint(routine))
+  // A routine edited mid-workout, applied on the next reset.
+  const pendingRoutine = useRef<Routine | null>(null)
+
+  // Apply routine changes — but never reset a running/paused workout.
   useEffect(() => {
+    const fp = routineFingerprint(routine)
+    if (fp === appliedFp.current) return // structural no-op (identity churn)
+
+    const status = engine.getSnapshot().status
+    if (status === 'running' || status === 'paused') {
+      pendingRoutine.current = routine // defer until reset
+      return
+    }
     engine.load(routine)
+    appliedFp.current = fp
+    pendingRoutine.current = null
     setSnapshot(engine.getSnapshot())
   }, [engine, routine])
 
@@ -87,7 +118,15 @@ export function useTimer(routine: Routine): UseTimer {
   }, [engine, pause, start])
 
   const reset = useCallback(() => {
-    engine.reset()
+    // Apply any routine edited mid-workout as part of the reset.
+    const pending = pendingRoutine.current
+    if (pending) {
+      engine.load(pending) // load() resets internally
+      appliedFp.current = routineFingerprint(pending)
+      pendingRoutine.current = null
+    } else {
+      engine.reset()
+    }
     stopLoop()
     setSnapshot(engine.getSnapshot())
   }, [engine, stopLoop])

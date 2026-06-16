@@ -3,6 +3,7 @@
  * mode, and toggle audio. Reads/writes the persisted settings store.
  */
 
+import { useEffect, useRef } from 'react'
 import { totalSeconds } from '../engine/routine'
 import { useSettings } from '../state/SettingsProvider'
 import { CUSTOM_PRESET_ID, PRESETS, type VisualMode } from '../state/settings'
@@ -60,13 +61,58 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   const { routine, presetId, visualMode, music, cuesMuted } = settings
   const install = useInstallPrompt()
 
+  const panelRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+
+  // Modal focus management: move focus in on open, restore it on close.
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null
+    closeRef.current?.focus()
+    return () => previouslyFocused?.focus?.()
+  }, [])
+
+  // Escape to close; Tab trapped within the panel.
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation()
+      onClose()
+      return
+    }
+    if (e.key !== 'Tab' || !panelRef.current) return
+    const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    )
+    if (focusable.length === 0) return
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
+
   return (
-    <div className="settings-overlay" role="dialog" aria-modal="true" aria-label="Workout settings">
+    <div
+      className="settings-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Workout settings"
+      onKeyDown={handleKeyDown}
+    >
       <div className="settings-backdrop" onClick={onClose} />
-      <div className="settings-panel">
+      <div className="settings-panel" ref={panelRef}>
         <header className="settings-panel__header">
           <h2>Settings</h2>
-          <button type="button" className="settings-panel__close" onClick={onClose} aria-label="Close settings">
+          <button
+            type="button"
+            className="settings-panel__close"
+            onClick={onClose}
+            aria-label="Close settings"
+            ref={closeRef}
+          >
             ✕
           </button>
         </header>
@@ -80,6 +126,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
                   key={p.id}
                   type="button"
                   className={`settings-chip ${presetId === p.id ? 'is-active' : ''}`}
+                  aria-pressed={presetId === p.id}
                   onClick={() => selectPreset(p.id)}
                 >
                   {p.name}
@@ -131,11 +178,13 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
 
           <section className="settings-section">
             <h3>Visuals</h3>
-            <div className="settings-segmented">
+            <div className="settings-segmented" role="radiogroup" aria-label="Visual style">
               {VISUAL_MODES.map((m) => (
                 <button
                   key={m.id}
                   type="button"
+                  role="radio"
+                  aria-checked={visualMode === m.id}
                   className={`settings-segmented__btn ${visualMode === m.id ? 'is-active' : ''}`}
                   onClick={() => setVisualMode(m.id)}
                 >

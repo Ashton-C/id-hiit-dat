@@ -32,7 +32,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,webmanifest,woff2}'],
-        globIgnores: ['music/**'], // future bundled audio served by runtime CacheFirst
+        // Exclude future bundled audio (runtime CacheFirst) and build-time icon
+        // source art that never needs to ship to clients.
+        globIgnores: ['music/**', '**/*-source.svg'],
         navigateFallback: '/index.html',
         cleanupOutdatedCaches: true,
         clientsClaim: true,

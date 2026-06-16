@@ -1,17 +1,18 @@
 .diagram-visual {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  background-color: color-mix(in srgb, var(--accent) 55%, #15171c);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* Sit the figure near the top so it's clearly separated from the timer below. */
+  padding-top: clamp(2rem, 9vh, 6rem);
+  background-color: color-mix(in srgb, var(--accent) 48%, #15171c);
   transition: background-color 0.5s ease;
 }
 
 .diagram-visual__figure {
-  width: min(70vw, 46vh);
-  color: rgba(255, 255, 255, 0.9);
-  /* Nudge up so the centered TimerDisplay reads over the legs, not the head. */
-  transform: translateY(-6%);
+  width: min(48vw, 30vh);
+  color: rgba(255, 255, 255, 0.92);
   transition: opacity 0.4s ease;
 }
 

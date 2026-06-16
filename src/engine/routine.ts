@@ -78,13 +78,17 @@ export function buildTimeline(routine: Routine): TimelinePhase[] {
         round,
         workIndex,
       })
-      phases.push({
-        kind: 'rest',
-        durationSeconds: routine.restSeconds,
-        exercise: null,
-        round,
-        workIndex,
-      })
+      // Skip zero-length rests entirely (e.g. rest=0) so they don't fire a
+      // spurious rest cue + double transition.
+      if (routine.restSeconds > 0) {
+        phases.push({
+          kind: 'rest',
+          durationSeconds: routine.restSeconds,
+          exercise: null,
+          round,
+          workIndex,
+        })
+      }
     }
   }
 

@@ -62,8 +62,6 @@ export const TRACKS: Track[] = [
   },
 ]
 
-export const DEFAULT_PLAYLIST: string[] = TRACKS.map((t) => t.id)
-
 export function trackById(id: string | null | undefined): Track | undefined {
   return id ? TRACKS.find((t) => t.id === id) : undefined
 }

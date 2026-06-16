@@ -7,16 +7,20 @@
 import type { PhaseKind } from '../engine/routine'
 
 export interface PhasePalette {
-  /** Solid background for minimal mode + diagram accent. */
+  /** Solid background for minimal mode + diagram accent (muted, dark-theme). */
   base: string
-  /** Two-stop gradient ends for gradient mode. */
+  /** Three vivid neon stops for the gradient mode's animated layers. */
   gradA: string
   gradB: string
+  gradC: string
+  /** Bright LED accent used for the moving scanline shimmer. */
+  glow: string
 }
 
 export const PALETTES: Record<PhaseKind, PhasePalette> = {
-  prepare: { base: '#1f2430', gradA: '#1f2430', gradB: '#2b3550' }, // neutral slate
-  work: { base: '#7a1f2b', gradA: '#7a1f2b', gradB: '#c8402f' }, //    intense crimson → ember
-  rest: { base: '#14463f', gradA: '#0f3b46', gradB: '#1e7a63' }, //    calm teal
-  done: { base: '#1d4d2b', gradA: '#1d4d2b', gradB: '#3a8f4f' }, //    success green
+  // Muted `base` keeps minimal/diagram calm; gradA/B/C + glow go full neon.
+  prepare: { base: '#1f2430', gradA: '#3b1d8f', gradB: '#5b3fff', gradC: '#1e6bff', glow: '#8a7bff' }, // indigo → electric violet → blue
+  work: { base: '#7a1f2b', gradA: '#ff1f6b', gradB: '#ff6a00', gradC: '#ff0048', glow: '#ffd24a' }, //    hot magenta → ember → red
+  rest: { base: '#14463f', gradA: '#00e0ff', gradB: '#0aa', gradC: '#1e7aff', glow: '#7dfcff' }, //       cyan → teal → blue
+  done: { base: '#1d4d2b', gradA: '#23e06b', gradB: '#9dff3c', gradC: '#00d49b', glow: '#caffaf' }, //    lime → emerald
 }

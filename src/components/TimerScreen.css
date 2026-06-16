@@ -15,6 +15,12 @@
   align-items: center;
   gap: clamp(2rem, 8vh, 4rem);
   padding: 2rem;
+  transition: transform 0.4s ease;
+}
+
+/* In diagram mode the figure sits up top, so drop the (shrunk) timer lower. */
+.timer-screen--diagram .timer-screen__content {
+  transform: translateY(14vh);
 }
 
 .timer-screen__gear {
@@ -22,8 +28,8 @@
   top: max(1rem, env(safe-area-inset-top));
   right: max(1rem, env(safe-area-inset-right));
   z-index: 2;
-  width: 2.6rem;
-  height: 2.6rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 999px;
   border: none;
   background: rgba(255, 255, 255, 0.14);

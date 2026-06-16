@@ -25,6 +25,30 @@
   letter-spacing: -0.02em;
 }
 
+/* Diagram mode: shrink the countdown so the figure above it has room to breathe. */
+.timer-screen--diagram .timer-display__time {
+  font-size: clamp(3rem, 15vw, 7rem);
+}
+
+.timer-display__progress {
+  width: min(60vw, 320px);
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.timer-display__progress-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  transform-origin: left center;
+  transform: scaleX(0);
+  /* Brief smoothing between the discrete per-frame updates. */
+  transition: transform 0.12s linear;
+}
+
 .timer-display__exercise {
   font-size: clamp(1.5rem, 7vw, 3rem);
   font-weight: 700;
