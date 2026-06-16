@@ -1,0 +1,46 @@
+.visual-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  transition: background-color 0.5s ease;
+  background-color: var(--phase-bg, #15171c);
+}
+
+/* Phase background colors (minimal mode, dark theme). */
+.visual-layer.phase-prepare {
+  --phase-bg: #1f2430;
+}
+.visual-layer.phase-work {
+  --phase-bg: #7a1f2b;
+}
+.visual-layer.phase-rest {
+  --phase-bg: #14463f;
+}
+.visual-layer.phase-done {
+  --phase-bg: #1d4d2b;
+}
+
+.visual-layer__flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  animation: visual-flash 0.45s ease-out;
+}
+
+@keyframes visual-flash {
+  0% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual-layer__flash {
+    animation: none;
+  }
+}

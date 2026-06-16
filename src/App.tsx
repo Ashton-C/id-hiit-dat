@@ -1,6 +1,10 @@
 import { TimerScreen } from './components/TimerScreen'
-import { DEFAULT_ROUTINE } from './engine/routine'
+import { SettingsProvider } from './state/SettingsProvider'
 
 export default function App() {
-  return <TimerScreen routine={DEFAULT_ROUTINE} />
+  return (
+    <SettingsProvider>
+      <TimerScreen />
+    </SettingsProvider>
+  )
 }

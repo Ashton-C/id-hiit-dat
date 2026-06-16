@@ -1,46 +1,52 @@
 /**
- * Single-screen workout view. Owns the engine binding and the "minimal" visual
- * mode (phase-colored background + transition flash), and routes phase events to
- * audio cues. Richer visual modes (gradient, exercise diagrams) and music plug in
- * here in later iterations.
+ * Single-screen workout view. Binds the timer engine, routes phase events to
+ * audio cues, and composes the visual background, controls, and settings.
+ * Music plugs in here in its own phase (gated on settings.music.enabled).
  */
 
 import { useEffect, useRef, useState } from 'react'
-import type { Routine } from '../engine/routine'
 import { CuePlayer } from '../engine/cues'
+import { useSettings } from '../state/SettingsProvider'
 import { useTimer } from '../state/useTimer'
 import { TimerDisplay } from '../visuals/TimerDisplay'
+import { VisualLayer } from '../visuals/VisualLayer'
 import { Controls } from './Controls'
+import { SettingsPanel } from './SettingsPanel'
 import './TimerScreen.css'
 
 /** Seconds remaining at/under which we play countdown ticks. */
 const COUNTDOWN_FROM = 3
 
-export function TimerScreen({ routine }: { routine: Routine }) {
-  const { snapshot, toggle, reset, onTransition } = useTimer(routine)
+export function TimerScreen() {
+  const { settings } = useSettings()
+  const { snapshot, toggle, reset, onTransition } = useTimer(settings.routine)
+
   const cueRef = useRef<CuePlayer | null>(null)
   if (cueRef.current === null) cueRef.current = new CuePlayer()
   const cue = cueRef.current
 
-  const [flashKey, setFlashKey] = useState(0)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const lastBeepSecond = useRef<number | null>(null)
 
-  // Cue + flash on every phase transition.
+  // Keep the cue player's mute state in sync with settings.
+  useEffect(() => {
+    cue.setMuted(settings.cuesMuted)
+  }, [cue, settings.cuesMuted])
+
+  // Audio cue on each phase transition.
   useEffect(() => {
     return onTransition((event) => {
       const kind = event.to.kind
       if (kind === 'work') cue.play('work')
       else if (kind === 'rest') cue.play('rest')
       else if (kind === 'done') cue.play('done')
-      setFlashKey((k) => k + 1)
       lastBeepSecond.current = null
     })
   }, [onTransition, cue])
 
   // Countdown ticks in the final seconds of an active phase.
   useEffect(() => {
-    if (snapshot.status !== 'running') return
-    if (snapshot.phase.kind === 'done') return
+    if (snapshot.status !== 'running' || snapshot.phase.kind === 'done') return
     const left = snapshot.phaseRemainingSeconds
     if (left > 0 && left <= COUNTDOWN_FROM && lastBeepSecond.current !== left) {
       lastBeepSecond.current = left
@@ -54,12 +60,24 @@ export function TimerScreen({ routine }: { routine: Routine }) {
   }
 
   return (
-    <main className={`timer-screen timer-screen--${snapshot.phase.kind}`}>
-      <div key={flashKey} className="timer-screen__flash" aria-hidden="true" />
+    <main className="timer-screen">
+      <VisualLayer mode={settings.visualMode} snapshot={snapshot} />
+
+      <button
+        type="button"
+        className="timer-screen__gear"
+        onClick={() => setSettingsOpen(true)}
+        aria-label="Open settings"
+      >
+        ⚙
+      </button>
+
       <div className="timer-screen__content">
         <TimerDisplay snapshot={snapshot} />
         <Controls status={snapshot.status} onToggle={handleToggle} onReset={reset} />
       </div>
+
+      {settingsOpen && <SettingsPanel onClose={() => setSettingsOpen(false)} />}
     </main>
   )
 }
