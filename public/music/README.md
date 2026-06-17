@@ -60,11 +60,3 @@ All by Kevin MacLeod (incompetech.com), https://incompetech.com/music/royalty-fr
 | `shades-of-spring.ogg` | Shades of Spring |
 | `no-frills-salsa.ogg` | No Frills Salsa |
 
-## Orphaned (no longer in any playlist)
-
-The original CC0 Electronic set (tricksntraps rhythm packs + HoliznaCC0 Power Pop)
-and the earlier CC-BY tracks were removed from `tracks.ts` when the Electronic
-playlist was replaced. Their `.ogg` files may still sit in this folder unused
-(`ascend`, `flying-temple`, `lost-utopia`, `starting-over`, `the-lab`, `drama`,
-`extended`, `retro-synths`, `mutant-club`, `happy-dance`, `electrodoodle`,
-`local-forecast`) — safe to delete.

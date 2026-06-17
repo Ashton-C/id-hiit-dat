@@ -51,8 +51,8 @@ Latin & Jazz playlist:
 - No Frills Salsa — File: public/music/no-frills-salsa.ogg
 
 > The original CC0 Electronic set (tricksntraps OpenGameArt packs + HoliznaCC0 Power
-> Pop) and the earlier CC-BY tracks (Electrodoodle, Local Forecast) were removed from
-> the playlists when Electronic was replaced; their files in `public/music/` are unused.
+> Pop) and the earlier CC-BY tracks (Electrodoodle, Local Forecast) were removed when
+> the Electronic playlist was replaced, and their `.ogg` files have been deleted.
 
 ## Exercise diagrams
 
