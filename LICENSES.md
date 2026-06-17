@@ -22,23 +22,25 @@ All by **Kevin MacLeod** (incompetech.com), https://incompetech.com/music/royalt
 Per-track attribution format: `"<Title>" by Kevin MacLeod (incompetech.com) — licensed
 under Creative Commons: By Attribution 4.0` (wired into the app via `Track.attribution`).
 
-Electronic playlist:
-- 8bit Dungeon Boss — File: public/music/8bit-dungeon-boss.ogg
-- Club Diver — File: public/music/club-diver.ogg
+Energetic playlist:
 - Desert of Lost Souls — File: public/music/desert-of-lost-souls.ogg
 - Double O — File: public/music/double-o.ogg
 - Equatorial Complex — File: public/music/equatorial-complex.ogg
 - Future Cha Cha — File: public/music/future-cha-cha.ogg
 - Getting it Done — File: public/music/getting-it-done.ogg
-- Harmful or Fatal — File: public/music/harmful-or-fatal.ogg
 - Laser Groove — File: public/music/laser-groove.ogg
 - Raving Energy (faster) — File: public/music/raving-energy-faster.ogg
 - Reformat — File: public/music/reformat.ogg
 - Shiny Tech — File: public/music/shiny-tech.ogg
 - Shiny Tech II — File: public/music/shiny-tech-ii.ogg
 - Show Your Moves — File: public/music/show-your-moves.ogg
-- Video Dungeon Boss — File: public/music/video-dungeon-boss.ogg
 - Voice Over Under — File: public/music/voice-over-under.ogg
+
+Aggressive playlist (videogame / dark / aggressive):
+- 8bit Dungeon Boss — File: public/music/8bit-dungeon-boss.ogg
+- Club Diver — File: public/music/club-diver.ogg
+- Harmful or Fatal — File: public/music/harmful-or-fatal.ogg
+- Video Dungeon Boss — File: public/music/video-dungeon-boss.ogg
 
 Latin & Jazz playlist:
 - Apero Hour — File: public/music/apero-hour.ogg

@@ -22,28 +22,35 @@ and save with the **exact** filename below. Files map to playlists via each trac
 | `shadow-self.ogg` | Shadow Self | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/ |
 | `strange-brew.ogg` | Strange Brew | HoliznaCC0 | https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/ |
 
-## Electronic — CC-BY 4.0 (attribution REQUIRED, shown in Settings → Credits)
+## Energetic — CC-BY 4.0 (attribution REQUIRED, shown in Settings → Credits)
 
-All by Kevin MacLeod (incompetech.com), https://incompetech.com/music/royalty-free/
+Kevin MacLeod (incompetech.com) electronica — bright/bouncy/driving.
 
 | File | Track |
 | ---- | ----- |
-| `8bit-dungeon-boss.ogg` | 8bit Dungeon Boss |
-| `club-diver.ogg` | Club Diver |
 | `desert-of-lost-souls.ogg` | Desert of Lost Souls |
 | `double-o.ogg` | Double O |
 | `equatorial-complex.ogg` | Equatorial Complex |
 | `future-cha-cha.ogg` | Future Cha Cha |
 | `getting-it-done.ogg` | Getting it Done |
-| `harmful-or-fatal.ogg` | Harmful or Fatal |
 | `laser-groove.ogg` | Laser Groove |
 | `raving-energy-faster.ogg` | Raving Energy (faster) |
 | `reformat.ogg` | Reformat |
 | `shiny-tech.ogg` | Shiny Tech |
 | `shiny-tech-ii.ogg` | Shiny Tech II |
 | `show-your-moves.ogg` | Show Your Moves |
-| `video-dungeon-boss.ogg` | Video Dungeon Boss |
 | `voice-over-under.ogg` | Voice Over Under |
+
+## Aggressive — CC-BY 4.0 (attribution REQUIRED, shown in Settings → Credits)
+
+Kevin MacLeod (incompetech.com) — videogame / dark / aggressive-tagged tracks.
+
+| File | Track |
+| ---- | ----- |
+| `8bit-dungeon-boss.ogg` | 8bit Dungeon Boss |
+| `club-diver.ogg` | Club Diver |
+| `harmful-or-fatal.ogg` | Harmful or Fatal |
+| `video-dungeon-boss.ogg` | Video Dungeon Boss |
 
 ## Latin & Jazz — CC-BY 4.0 (attribution REQUIRED, shown in Settings → Credits)
 

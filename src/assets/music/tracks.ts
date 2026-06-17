@@ -16,14 +16,15 @@ export type TrackSource =
   | { kind: 'file'; url: string }
 
 /** Genre tag used by the playlist picker. */
-export type TrackCategory = 'electronic' | 'hiphop' | 'latin-jazz'
+export type TrackCategory = 'energetic' | 'aggressive' | 'hiphop' | 'latin-jazz'
 
 /** A selectable playlist: a genre, or 'all'. */
 export type PlaylistId = 'all' | TrackCategory
 
 export const PLAYLISTS: { id: PlaylistId; label: string }[] = [
   { id: 'all', label: 'All' },
-  { id: 'electronic', label: 'Electronic' },
+  { id: 'energetic', label: 'Energetic' },
+  { id: 'aggressive', label: 'Aggressive' },
   { id: 'hiphop', label: 'Hip Hop' },
   { id: 'latin-jazz', label: 'Latin & Jazz' },
 ]
@@ -73,23 +74,29 @@ const HIPHOP_CC0_TRACKS: Track[] = [
   { id: 'strange-brew', title: 'Strange Brew', artist: 'HoliznaCC0', bpm: 136, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/strange-brew.ogg' } },
 ]
 
-/** CC-BY electronica (Kevin MacLeod) — the Electronic playlist. */
-const ELECTRONIC_TRACKS: Track[] = [
-  km('8bit-dungeon-boss', '8bit Dungeon Boss', 134),
-  km('club-diver', 'Club Diver', 140),
+/**
+ * CC-BY electronica (Kevin MacLeod), split by mood. Aggressive = videogame or
+ * "dark"/"aggressive"-tagged tracks; Energetic = the bright/bouncy/driving rest.
+ */
+const AGGRESSIVE_TRACKS: Track[] = [
+  km('8bit-dungeon-boss', '8bit Dungeon Boss', 134), // videogame + Dark
+  km('club-diver', 'Club Diver', 140), // Aggressive + Dark
+  km('harmful-or-fatal', 'Harmful or Fatal', 135), // Aggressive (harsh industrial)
+  km('video-dungeon-boss', 'Video Dungeon Boss', 142), // videogame + Dark
+]
+
+const ENERGETIC_TRACKS: Track[] = [
   km('desert-of-lost-souls', 'Desert of Lost Souls', 134),
   km('double-o', 'Double O', 140),
   km('equatorial-complex', 'Equatorial Complex', 120),
   km('future-cha-cha', 'Future Cha Cha', 140),
   km('getting-it-done', 'Getting it Done', 135),
-  km('harmful-or-fatal', 'Harmful or Fatal', 135),
   km('laser-groove', 'Laser Groove', 140),
   km('raving-energy-faster', 'Raving Energy (faster)', 134),
   km('reformat', 'Reformat', 140),
   km('shiny-tech', 'Shiny Tech', 138),
   km('shiny-tech-ii', 'Shiny Tech II', 138),
   km('show-your-moves', 'Show Your Moves', 136),
-  km('video-dungeon-boss', 'Video Dungeon Boss', 142),
   km('voice-over-under', 'Voice Over Under', 135),
 ]
 
@@ -109,7 +116,8 @@ const withCategory = (tracks: Track[], category: TrackCategory): Track[] =>
   tracks.map((t) => ({ ...t, category }))
 
 export const TRACKS: Track[] = [
-  ...withCategory(ELECTRONIC_TRACKS, 'electronic'),
+  ...withCategory(ENERGETIC_TRACKS, 'energetic'),
+  ...withCategory(AGGRESSIVE_TRACKS, 'aggressive'),
   ...withCategory(HIPHOP_CC0_TRACKS, 'hiphop'),
   ...withCategory(LATIN_JAZZ_TRACKS, 'latin-jazz'),
 ]
