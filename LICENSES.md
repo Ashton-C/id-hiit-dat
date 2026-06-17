@@ -1,29 +1,8 @@
 # Music Licenses & Attribution
 
-This app can bundle audio for offline playback. Procedural demo tracks ship no audio
-bytes (synthesized at runtime). Real tracks are dropped into `public/music/` (see
-`public/music/README.md`) and referenced from `src/assets/music/tracks.ts`.
-
-## Demo (procedural)
-
-- **Pulse**, **Glow**, **Drive** — generated procedurally at runtime
-  (`src/assets/music/synth.ts`); no copyrighted audio. License: project code. No
-  attribution. Kept as an always-available offline fallback.
-
-## Bundled tracks — CC0 1.0 (no attribution required)
-
-License URL: https://creativecommons.org/publicdomain/zero/1.0/
-
-- Title: Ascend — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/ascend.ogg
-- Title: Flying Temple — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/flying-temple.ogg
-- Title: Lost Utopia — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/lost-utopia.ogg
-- Title: Starting Over — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/starting-over.ogg
-- Title: The Lab — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-1 — File: public/music/the-lab.ogg
-- Title: Drama — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-2 — File: public/music/drama.ogg
-- Title: Extended — Artist: tricksntraps — Source: https://opengameart.org/content/free-rhythm-game-music-pack-2 — File: public/music/extended.ogg
-- Title: Retro Synths — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/power-pop/retro-synths/ — File: public/music/retro-synths.ogg
-- Title: Mutant Club — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/power-pop — File: public/music/mutant-club.ogg
-- Title: Happy Dance — Artist: HoliznaCC0 — Source: https://freemusicarchive.org/music/holiznacc0/power-pop — File: public/music/happy-dance.ogg
+This app bundles audio for offline playback. Tracks are dropped into `public/music/`
+(see `public/music/README.md`) and referenced from `src/assets/music/tracks.ts`.
+Playlists: Hip Hop (CC0), Electronic (CC-BY), Latin & Jazz (CC-BY).
 
 ## Bundled tracks — CC0 1.0 hip hop / phonk (no attribution required)
 
@@ -39,16 +18,41 @@ License URL: https://creativecommons.org/publicdomain/zero/1.0/
 ## Bundled tracks — CC-BY 4.0 (attribution REQUIRED, shown in Settings → Credits)
 
 License URL: https://creativecommons.org/licenses/by/4.0/
+All by **Kevin MacLeod** (incompetech.com), https://incompetech.com/music/royalty-free/
+Per-track attribution format: `"<Title>" by Kevin MacLeod (incompetech.com) — licensed
+under Creative Commons: By Attribution 4.0` (wired into the app via `Track.attribution`).
 
-- Title: Electrodoodle — Artist: Kevin MacLeod (incompetech.com) — Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200079 — File: public/music/electrodoodle.ogg
-  Attribution: "Electrodoodle" by Kevin MacLeod (incompetech.com) — licensed under Creative Commons: By Attribution 4.0
-- Title: Local Forecast — Artist: Kevin MacLeod (incompetech.com) — Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1300012 — File: public/music/local-forecast.ogg
-  Attribution: "Local Forecast" by Kevin MacLeod (incompetech.com) — licensed under Creative Commons: By Attribution 4.0
+Electronic playlist:
+- 8bit Dungeon Boss — File: public/music/8bit-dungeon-boss.ogg
+- Club Diver — File: public/music/club-diver.ogg
+- Desert of Lost Souls — File: public/music/desert-of-lost-souls.ogg
+- Double O — File: public/music/double-o.ogg
+- Equatorial Complex — File: public/music/equatorial-complex.ogg
+- Future Cha Cha — File: public/music/future-cha-cha.ogg
+- Getting it Done — File: public/music/getting-it-done.ogg
+- Harmful or Fatal — File: public/music/harmful-or-fatal.ogg
+- Laser Groove — File: public/music/laser-groove.ogg
+- Raving Energy (faster) — File: public/music/raving-energy-faster.ogg
+- Reformat — File: public/music/reformat.ogg
+- Shiny Tech — File: public/music/shiny-tech.ogg
+- Shiny Tech II — File: public/music/shiny-tech-ii.ogg
+- Show Your Moves — File: public/music/show-your-moves.ogg
+- Video Dungeon Boss — File: public/music/video-dungeon-boss.ogg
+- Voice Over Under — File: public/music/voice-over-under.ogg
 
-> Verify each track's license at download time (licenses can vary per track within a
-> site). Pixabay/ccMixter were not auto-verifiable during research — confirm in a
-> browser before adding. The CC-BY attribution strings above are wired into the app's
-> Credits screen via `Track.attribution`.
+Latin & Jazz playlist:
+- Apero Hour — File: public/music/apero-hour.ogg
+- Faster Does It — File: public/music/faster-does-it.ogg
+- Night on the Docks - Piano — File: public/music/night-on-the-docks-piano.ogg
+- Night on the Docks - Sax — File: public/music/night-on-the-docks-sax.ogg
+- Night on the Docks - Trumpet — File: public/music/night-on-the-docks-trumpet.ogg
+- Nouvelle Noel — File: public/music/nouvelle-noel.ogg
+- Shades of Spring — File: public/music/shades-of-spring.ogg
+- No Frills Salsa — File: public/music/no-frills-salsa.ogg
+
+> The original CC0 Electronic set (tricksntraps OpenGameArt packs + HoliznaCC0 Power
+> Pop) and the earlier CC-BY tracks (Electrodoodle, Local Forecast) were removed from
+> the playlists when Electronic was replaced; their files in `public/music/` are unused.
 
 ## Exercise diagrams
 

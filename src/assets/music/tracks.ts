@@ -5,7 +5,7 @@
  * Drop the matching .ogg files into `public/music/` (see its README) and they
  * play automatically — the build never needs the files present, and the mixer
  * gracefully skips any track whose file is missing. Tracks are tagged by genre so
- * the Settings playlist picker can select All / Electronic / Hip Hop.
+ * the Settings playlist picker can select All / Electronic / Hip Hop / Latin & Jazz.
  * See LICENSES.md for sources.
  */
 
@@ -16,7 +16,7 @@ export type TrackSource =
   | { kind: 'file'; url: string }
 
 /** Genre tag used by the playlist picker. */
-export type TrackCategory = 'electronic' | 'hiphop'
+export type TrackCategory = 'electronic' | 'hiphop' | 'latin-jazz'
 
 /** A selectable playlist: a genre, or 'all'. */
 export type PlaylistId = 'all' | TrackCategory
@@ -25,6 +25,7 @@ export const PLAYLISTS: { id: PlaylistId; label: string }[] = [
   { id: 'all', label: 'All' },
   { id: 'electronic', label: 'Electronic' },
   { id: 'hiphop', label: 'Hip Hop' },
+  { id: 'latin-jazz', label: 'Latin & Jazz' },
 ]
 
 export interface Track {
@@ -47,19 +48,18 @@ export interface Track {
 
 const SEGMENT = 90
 
-/** CC0 — no attribution required, free to bundle/redistribute. */
-const CC0_TRACKS: Track[] = [
-  { id: 'ascend', title: 'Ascend', artist: 'tricksntraps', bpm: 130, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/ascend.ogg' } },
-  { id: 'flying-temple', title: 'Flying Temple', artist: 'tricksntraps', bpm: 128, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/flying-temple.ogg' } },
-  { id: 'lost-utopia', title: 'Lost Utopia', artist: 'tricksntraps', bpm: 127, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/lost-utopia.ogg' } },
-  { id: 'starting-over', title: 'Starting Over', artist: 'tricksntraps', bpm: 122, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/starting-over.ogg' } },
-  { id: 'the-lab', title: 'The Lab', artist: 'tricksntraps', bpm: 144, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/the-lab.ogg' } },
-  { id: 'drama', title: 'Drama', artist: 'tricksntraps', bpm: 130, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/drama.ogg' } },
-  { id: 'extended', title: 'Extended', artist: 'tricksntraps', bpm: 120, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/extended.ogg' } },
-  { id: 'retro-synths', title: 'Retro Synths', artist: 'HoliznaCC0', bpm: 120, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/retro-synths.ogg' } },
-  { id: 'mutant-club', title: 'Mutant Club', artist: 'HoliznaCC0', bpm: 120, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/mutant-club.ogg' } },
-  { id: 'happy-dance', title: 'Happy Dance', artist: 'HoliznaCC0', bpm: 120, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/happy-dance.ogg' } },
-]
+/** Build a Kevin MacLeod CC-BY 4.0 track (attribution shown on Credits screen). */
+const km = (id: string, title: string, bpm: number): Track => ({
+  id,
+  title,
+  artist: 'Kevin MacLeod',
+  bpm,
+  durationSeconds: SEGMENT,
+  loopable: true,
+  license: 'CC-BY-4.0',
+  attribution: `"${title}" by Kevin MacLeod (incompetech.com) — licensed under Creative Commons: By Attribution 4.0 (http://creativecommons.org/licenses/by/4.0/)`,
+  source: { kind: 'file', url: `/music/${id}.ogg` },
+})
 
 /** CC0 hip hop / phonk beats — high-energy workout fuel, no attribution required. */
 const HIPHOP_CC0_TRACKS: Track[] = [
@@ -73,41 +73,45 @@ const HIPHOP_CC0_TRACKS: Track[] = [
   { id: 'strange-brew', title: 'Strange Brew', artist: 'HoliznaCC0', bpm: 136, durationSeconds: SEGMENT, loopable: true, license: 'CC0-1.0', source: { kind: 'file', url: '/music/strange-brew.ogg' } },
 ]
 
-/** CC-BY — usable, but the attribution string MUST be shown (Credits screen). */
-const CC_BY_TRACKS: Track[] = [
-  {
-    id: 'electrodoodle',
-    title: 'Electrodoodle',
-    artist: 'Kevin MacLeod',
-    bpm: 120,
-    durationSeconds: SEGMENT,
-    loopable: true,
-    license: 'CC-BY-4.0',
-    attribution:
-      '"Electrodoodle" by Kevin MacLeod (incompetech.com) — licensed under Creative Commons: By Attribution 4.0 (http://creativecommons.org/licenses/by/4.0/)',
-    source: { kind: 'file', url: '/music/electrodoodle.ogg' },
-  },
-  {
-    id: 'local-forecast',
-    title: 'Local Forecast',
-    artist: 'Kevin MacLeod',
-    bpm: 154,
-    durationSeconds: SEGMENT,
-    loopable: true,
-    license: 'CC-BY-4.0',
-    attribution:
-      '"Local Forecast" by Kevin MacLeod (incompetech.com) — licensed under Creative Commons: By Attribution 4.0 (http://creativecommons.org/licenses/by/4.0/)',
-    source: { kind: 'file', url: '/music/local-forecast.ogg' },
-  },
+/** CC-BY electronica (Kevin MacLeod) — the Electronic playlist. */
+const ELECTRONIC_TRACKS: Track[] = [
+  km('8bit-dungeon-boss', '8bit Dungeon Boss', 134),
+  km('club-diver', 'Club Diver', 140),
+  km('desert-of-lost-souls', 'Desert of Lost Souls', 134),
+  km('double-o', 'Double O', 140),
+  km('equatorial-complex', 'Equatorial Complex', 120),
+  km('future-cha-cha', 'Future Cha Cha', 140),
+  km('getting-it-done', 'Getting it Done', 135),
+  km('harmful-or-fatal', 'Harmful or Fatal', 135),
+  km('laser-groove', 'Laser Groove', 140),
+  km('raving-energy-faster', 'Raving Energy (faster)', 134),
+  km('reformat', 'Reformat', 140),
+  km('shiny-tech', 'Shiny Tech', 138),
+  km('shiny-tech-ii', 'Shiny Tech II', 138),
+  km('show-your-moves', 'Show Your Moves', 136),
+  km('video-dungeon-boss', 'Video Dungeon Boss', 142),
+  km('voice-over-under', 'Voice Over Under', 135),
+]
+
+/** CC-BY latin & jazz (Kevin MacLeod) — the Latin & Jazz playlist. */
+const LATIN_JAZZ_TRACKS: Track[] = [
+  km('apero-hour', 'Apero Hour', 140),
+  km('faster-does-it', 'Faster Does It', 135),
+  km('night-on-the-docks-piano', 'Night on the Docks - Piano', 100),
+  km('night-on-the-docks-sax', 'Night on the Docks - Sax', 100),
+  km('night-on-the-docks-trumpet', 'Night on the Docks - Trumpet', 100),
+  km('nouvelle-noel', 'Nouvelle Noel', 135),
+  km('shades-of-spring', 'Shades of Spring', 131),
+  km('no-frills-salsa', 'No Frills Salsa', 144),
 ]
 
 const withCategory = (tracks: Track[], category: TrackCategory): Track[] =>
   tracks.map((t) => ({ ...t, category }))
 
 export const TRACKS: Track[] = [
-  ...withCategory(CC0_TRACKS, 'electronic'),
+  ...withCategory(ELECTRONIC_TRACKS, 'electronic'),
   ...withCategory(HIPHOP_CC0_TRACKS, 'hiphop'),
-  ...withCategory(CC_BY_TRACKS, 'electronic'),
+  ...withCategory(LATIN_JAZZ_TRACKS, 'latin-jazz'),
 ]
 
 export function trackById(id: string | null | undefined): Track | undefined {
@@ -116,8 +120,8 @@ export function trackById(id: string | null | undefined): Track | undefined {
 
 /** Resolve a playlist selection to the tracks it includes. */
 export function tracksForPlaylist(id: string): Track[] {
-  if (id === 'electronic' || id === 'hiphop') return TRACKS.filter((t) => t.category === id)
-  return TRACKS
+  const isGenre = PLAYLISTS.some((p) => p.id === id && p.id !== 'all')
+  return isGenre ? TRACKS.filter((t) => t.category === id) : TRACKS
 }
 
 /** Tracks whose license requires displayed attribution (for the Credits screen). */
